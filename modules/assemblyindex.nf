@@ -3,20 +3,21 @@ process ASSEMBLYINDEX {
     cpus 8
     
     input:
-    tuple val(sample_id), path(reads)
-    path fasta_assembly
+    tuple val(sample_id), path(trim_reads)
+    tuple val(sample_id), path(fasta_assembly)
 
     output:
-    path "${sample_id}.bam", emit: bam_file
-    path "${sample_id}.bam.bai", emit: index_bam
-    path "${sample_id}.bed", emit: bed_file
+    tuple val(sample_id),
+        path("${sample_id}.bam"),
+        path("${sample_id}.bam.bai"),
+        path("${sample_id}.bed")
 
     script:
     """
     bwa index -p "$sample_id" "$fasta_assembly"
 
     bwa mem -t $task.cpus -a "$sample_id" \
-    ${reads[0]} ${reads[1]} > "$sample_id".sam
+    ${trim_reads[0]} ${trim_reads[1]} > "$sample_id".sam
 
     samtools view -b -S "$sample_id".sam > "$sample_id".bam
     rm "$sample_id".sam

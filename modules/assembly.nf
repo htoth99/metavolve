@@ -5,9 +5,9 @@ process ASSEMBLY {
     tuple val(sample_id), path(removed_reads)
 
     output:
-    path "$sample_id/${sample_id}.fasta", emit: fasta_assembly
-    path "$sample_id/${sample_id}_scaffolds.fasta"
-    path "$sample_id/${sample_id}_spades.log"
+    tuple val(sample_id), path ("$sample_id/${sample_id}.fasta"), emit: fasta_contig
+    tuple val(sample_id), path ("$sample_id/${sample_id}_scaffolds.fasta"), emit: fasta_scaffold
+    tuple val(sample_id), path ("$sample_id/${sample_id}_spades.log")
 
     script:
     """

@@ -34,3 +34,8 @@ withName: 'BINNING' {
                 memory = 50.GB
                 clusterOptions = '-A PAS1568'
             }
+
+    extract_fasta_bins.py $fasta_assembly merged.csv --output "$sample_id"
+
+    # count fasta files in outdir, then pass to a txt file, then pass that txt file to another file that counts it
+    # other downstream files might have the answer

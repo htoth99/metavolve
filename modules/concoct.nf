@@ -1,23 +1,24 @@
 process CONCOCT {
+    
     input:
-    path bam_file
-    path indexed_bam
-    val bed_file
-    val fasta_assembly
+    tuple val(sample_id), path(fasta_assembly), path(bam_file), path(bam_index), path(bed_file)
 
     output:
-    path ('*.fa')
+    tuple val(sample_id), path ('fasta_bins/*.fa'), emit: concoct_fastas, optional: true
 
     script:
     """
-    cut_up_fasta.py "$fasta_assembly" -c 100000 --merge_last -b "$bed_file" > contigs10k.fasta
+    cp "$bed_file" copy.bed
 
-    concoct_coverage_table.py "$bed_file" "$bam_file" > covtable.tsv
+    cut_up_fasta.py $fasta_assembly -c 100000 --merge_last -b copy.bed > contigs10k.fasta
+
+    concoct_coverage_table.py copy.bed $bam_file > covtable.tsv
 
     concoct --composition_file contigs10k.fasta --coverage_file covtable.tsv -s 100
 
     merge_cutup_clustering.py clustering_gt1000.csv > merged.csv
 
-    extract_fasta_bins.py $fasta_assembly
+    mkdir fasta_bins
+    extract_fasta_bins.py $fasta_assembly merged.csv --output_path fasta_bins
     """
 }

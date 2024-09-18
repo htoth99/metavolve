@@ -23,31 +23,41 @@ include { KRAKEN2 } from './modules/kraken2.nf'
 include { ASSEMBLYINDEX } from './modules/assemblyindex.nf'
 include { MAXBIN2 } from './modules/maxbin2.nf'
 include { METABAT2 } from './modules/metabat2.nf'
-//include { CONCOCT } from './modules/concoct.nf'
+include { CONCOCT } from './modules/concoct.nf'
+include { DREP } from './modules/drep.nf'
 
 workflow {
-    // reads_ch = Channel.fromPath(params.reads, checkIfExists: true)
+    // prepare params
     paired_reads_ch = Channel.fromFilePairs(params.reads, checkIfExists: true)
     reads_ch = paired_reads_ch.flatten().filter(~/.*fastq.*/ )
-    host_ref_ch = Channel.fromPath(params.genome_ref)
+    host_ref_ch = Channel.fromPath(params.genome_ref).first()
     krakendb_ch = Channel.fromPath(params.kraken_db, type: 'dir')
 
+    // quality control and trimming
     fastqc_ch = FASTQC(reads_ch)
     trim_ch = TRIMGALORE(paired_reads_ch)
 
+    // index the host, if needed, then remove host
     host_index_ch = params.genome_index ? Channel.fromPath(params.genome_index) : (HOSTINDEX(host_ref_ch))
-
     host_remove_ch = HOSTREMOVE(host_index_ch, trim_ch)
+
+    // taxonomic classifier
     kraken_ch = KRAKEN2(host_remove_ch, params.kraken_db)
 
+    // assembly related channels
     assembly_ch = ASSEMBLY(host_remove_ch)
+    assembly_index_ch = ASSEMBLYINDEX(trim_ch, assembly_ch.fasta_scaffold)
+    asm_all_ch = assembly_ch.fasta_scaffold.join(assembly_index_ch)
+    asm_all_reads_ch = asm_all_ch.join(trim_ch)
+    //asm_all_reads_ch.view()
 
-    assembly_index_ch = ASSEMBLYINDEX(trim_ch, assembly_ch.fasta_assembly)
+    // binners
+    concoct_ch = CONCOCT(asm_all_ch)
+    maxbin2_ch = MAXBIN2(asm_all_reads_ch)
+    metabat2_ch = METABAT2(asm_all_ch)
+    bins_ch = concoct_ch.concoct_fastas.join(maxbin2_ch.maxbin2_fastas).join(metabat2_ch.metabat2_fastas)
 
-    //concoct_ch = CONCOCT(assembly_ch.fasta_assembly, assembly_index_ch)
 
-    maxbin2_ch = MAXBIN2(host_remove_ch, assembly_ch.fasta_assembly)
-    metabat2_ch = METABAT2(assembly_index_ch.bam_file, assembly_ch.fasta_assembly)
-    //binning_ch = METAWRAP(host_remove_ch, assembly_ch.fasta_assembly)
-
+    // deprelicate and checkm
+    drep_ch = DREP(bins_ch)
 }

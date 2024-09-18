@@ -5,10 +5,13 @@ process HOSTINDEX {
     path host_fasta
 
     output:
-    tuple val('host_index'), path('host_index*')
+    path 'host_index_dir'
 
     script:
     """
     bowtie2-build $host_fasta host_index
+
+    mkdir -p host_index_dir
+    mv *bt2 host_index_dir/
     """
 }
