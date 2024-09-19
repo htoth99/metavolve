@@ -3,8 +3,8 @@ process ASSEMBLYINDEX {
     cpus 8
     
     input:
-    tuple val(sample_id), path(trim_reads)
-    tuple val(sample_id), path(fasta_assembly)
+    //tuple val(sample_id), path(trim_reads)
+    tuple val(sample_id), path(fasta_assembly), path(trim_reads) 
 
     output:
     tuple val(sample_id),

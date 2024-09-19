@@ -38,7 +38,7 @@ workflow {
     trim_ch = TRIMGALORE(paired_reads_ch)
 
     // index the host, if needed, then remove host
-    host_index_ch = params.genome_index ? Channel.fromPath(params.genome_index) : (HOSTINDEX(host_ref_ch))
+    host_index_ch = params.genome_index ? Channel.fromPath(params.genome_index).first() : (HOSTINDEX(host_ref_ch))
     host_remove_ch = HOSTREMOVE(host_index_ch, trim_ch)
 
     // taxonomic classifier
@@ -46,7 +46,8 @@ workflow {
 
     // assembly related channels
     assembly_ch = ASSEMBLY(host_remove_ch)
-    assembly_index_ch = ASSEMBLYINDEX(trim_ch, assembly_ch.fasta_scaffold)
+    asm_and_reads_ch = assembly_ch.fasta_scaffold.join(trim_ch)
+    assembly_index_ch = ASSEMBLYINDEX(asm_and_reads_ch)
     asm_all_ch = assembly_ch.fasta_scaffold.join(assembly_index_ch)
     asm_all_reads_ch = asm_all_ch.join(trim_ch)
     //asm_all_reads_ch.view()
