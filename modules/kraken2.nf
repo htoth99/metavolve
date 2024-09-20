@@ -1,5 +1,5 @@
 process KRAKEN2 {
-    publishDir "${params.outdir}/kraken_results"
+    publishDir "${params.outdir}/kraken_results", mode: "copy"
 
     input:
     tuple val(sample_id), path(reads)

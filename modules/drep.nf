@@ -1,8 +1,8 @@
 process DREP {
-    publishDir "${params.outdir}/checkM_infotables", mode: "copy", pattern:"checkM_infotables"
-    publishDir "${params.outdir}/dereplicated_genomes", mode: "copy", pattern:"dereplicated_genomes"
-    publishDir "${params.outdir}/checkM_result", mode: "copy", pattern:"checkM_result"
-    
+    publishDir "${params.outdir}/dRep_results", mode: "copy"
+    //publishDir "${params.outdir}/checkM_infotables", mode: "copy", pattern:"data_tables"
+    //publishDir "${params.outdir}/dereplicated_genomes", mode: "copy", pattern:"dereplicated_genomes"
+    //publishDir "${params.outdir}/checkM_result", mode: "copy", pattern:"results.tsv"
     
     input:
     tuple val(sampled_id), path(concoct_fa), path(maxbin2_fa), path(metabat2_fa)
