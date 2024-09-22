@@ -8,9 +8,9 @@ process DREP {
     tuple val(sampled_id), path(concoct_fa), path(maxbin2_fa), path(metabat2_fa)
 
     output:
-    path 'data_tables', emit: checkM_infotables, optional: true
-    path 'dereplicated_genomes', emit: depreplicated_genomes, optional: true
-    path 'data/checkM/checkM_outdir/results.tsv', emit: checkM_result, optional: true
+    path 'drep_out/data_tables', emit: checkM_infotables, optional: true
+    path 'drep_out/dereplicated_genomes', emit: depreplicated_genomes, optional: true
+    path 'drep_out/data/checkM/checkM_outdir/results.tsv', emit: checkM_result, optional: true
     // flexible, probably best to specify what you want right here rather than down the line
 
     script:
