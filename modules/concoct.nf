@@ -20,5 +20,11 @@ process CONCOCT {
 
     mkdir fasta_bins
     extract_fasta_bins.py $fasta_assembly merged.csv --output_path fasta_bins
+
+    set +e
+    n_files=`find . -type f -name "*fa" | wc -l`
+    if [[ \$n_files -eq 0 ]]; then
+        touch concoct_${sample_id}_dummy.fa
+    fi
     """
 }

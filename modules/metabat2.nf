@@ -16,7 +16,7 @@ process METABAT2 {
     set +e
     n_files=`find . -type f -name "*fa" | wc -l`
     if [[ \$n_files -eq 0 ]]; then
-        touch metabat_dummy_${sample_id}.fa
+        touch metabat_${sample_id}_dummy.fa
     fi
 
     """

@@ -25,6 +25,7 @@ include { MAXBIN2 } from './modules/maxbin2.nf'
 include { METABAT2 } from './modules/metabat2.nf'
 include { CONCOCT } from './modules/concoct.nf'
 include { DREP } from './modules/drep.nf'
+include { CHECKM } from './modules/checkm.nf'
 
 workflow {
     // prepare params
@@ -61,4 +62,5 @@ workflow {
 
     // deprelicate and checkm
     drep_ch = DREP(bins_ch)
+    checkm_ch = CHECKM(drep_ch)
 }

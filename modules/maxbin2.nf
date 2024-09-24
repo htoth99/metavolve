@@ -13,6 +13,12 @@ process MAXBIN2 {
     -reads2 ${trim_reads[1]} \
     -out $sample_id
 
+    set +e
+    n_files=`find . -type f -name "*fa" | wc -l`
+    if [[ \$n_files -eq 0 ]]; then
+        touch maxbin2_${sample_id}_dummy.fa
+    fi
+
     """
 }
 
