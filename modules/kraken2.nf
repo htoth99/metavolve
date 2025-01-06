@@ -6,7 +6,8 @@ process KRAKEN2 {
     path database
 
     output:
-    path '*.kreport'
+    //path '*.kreport', emit: kreports
+    tuple val(sample_id), path('*.kreport'), emit: kreports
     path '*.kraken'
 
     script:
@@ -15,5 +16,7 @@ process KRAKEN2 {
     --report ${sample_id}.kreport \
     --output ${sample_id}.kraken \
     ${reads[0]} ${reads[1]}
+
+    
     """
 }

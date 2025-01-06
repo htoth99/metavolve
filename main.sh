@@ -2,7 +2,7 @@
 #SBATCH -A PAS1568
 #SBATCH --time=30:00:00
 #SBATCH --mail-type=END,FAIL
-#SBATCH --output=mgs_nf-%j.out
+#SBATCH --output=metavolvetest-%j.out
 
 set -euo pipefail
 

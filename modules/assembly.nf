@@ -1,5 +1,5 @@
 process ASSEMBLY {
-
+    publishDir "${params.outdir}/metaSPAdes", mode: "copy" 
     
     input:
     tuple val(sample_id), path(removed_reads)

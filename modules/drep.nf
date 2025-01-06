@@ -5,7 +5,9 @@ process DREP {
     tuple val(sample_id), path(concoct_fa), path(maxbin2_fa), path(metabat2_fa)
 
     output:
-    tuple val(sample_id), path("${sample_id}_dRep_out/dereplicated_genomes"), emit: dereplicated_genomes
+    tuple val(sample_id), path("${sample_id}_dRep_out/dereplicated_genomes/"), emit: checkm_genomes
+    path "${sample_id}_dRep_out/dereplicated_genomes/*", emit: dereplicated_genomes
+
 
     script:
     """
