@@ -20,7 +20,7 @@ include { HOSTINDEX } from './modules/hostindex.nf'
 include { HOSTREMOVE } from './modules/hostremove.nf'
 include { ASSEMBLY } from './modules/assembly.nf'
 include { KRAKEN2 } from './modules/kraken2.nf'
-//include { KRAKENBIOM } from './modules/kraken-biom.nf'
+include { KRAKENBIOM } from './modules/kraken-biom.nf'
 include { ASSEMBLYINDEX } from './modules/assemblyindex.nf'
 include { MAXBIN2 } from './modules/maxbin2.nf'
 include { METABAT2 } from './modules/metabat2.nf'
@@ -46,7 +46,7 @@ workflow {
 
     // taxonomic classifier
     kraken_ch = KRAKEN2(host_remove_ch, params.kraken_db)
-    //kraken_biom_ch = KRAKENBIOM(kraken_ch.kreports.flatten())
+    kraken_biom_ch = KRAKENBIOM(kraken_ch.kreports.collect())
 
     // assembly related channels
     assembly_ch = ASSEMBLY(host_remove_ch)

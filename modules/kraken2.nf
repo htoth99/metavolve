@@ -6,8 +6,8 @@ process KRAKEN2 {
     path database
 
     output:
-    //path '*.kreport', emit: kreports
-    tuple val(sample_id), path('*.kreport'), emit: kreports
+    path '*.kreport', emit: kreports
+    //tuple val(sample_id), path('*.kreport'), emit: kreports
     path '*.kraken'
 
     script:
