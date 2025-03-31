@@ -5,7 +5,11 @@ process BAKTA {
     path genomes
 
     output:
-    "*"
+    path '*.faa', emit: protein_files
+    path '*.fna'
+    path '*.gbff'
+    path '*.gff3'
+    path '*.ffn'
     
     script:
     """
@@ -13,5 +17,7 @@ process BAKTA {
     --gram ? \
     --force \
     $genomes
+
+    rm *.hypotheticals.faa
     """
 }

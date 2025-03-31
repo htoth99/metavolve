@@ -1,5 +1,5 @@
 params.reads = "$projectDir/data/rawreads/*_R{1,2}.fastq"
-params.genome_ref = "/fs/scratch/PAS1568/htoth99/bsmgs/fl-insillico/rawdata/plant_genomes/subset/subset_Slycopersicum_225.fa"
+params.genome_ref = "/fs/scratch/PAS1568/htoth99/bsmgs/data/Slycopersicum_796_ITAG5.0.fa.gz"
 params.kraken_db = "/users/PAS1568/htoth99/programs/kraken2/k2-pluspf"
 params.genome_index = null
 params.outdir = "$projectDir/results"
@@ -28,6 +28,7 @@ include { CONCOCT } from './modules/concoct.nf'
 include { DREP } from './modules/drep.nf'
 include { CHECKM } from './modules/checkm.nf'
 include { BAKTA } from './modules/bakta.nf'
+include { ORTHOFINDER } from './modules/orthofinder.nf'
 
 workflow {
     // prepare params
@@ -69,4 +70,7 @@ workflow {
 
     //annotate MAGs
     bakta_ch = BAKTA(drep_ch.dereplicated_genomes.flatten())
+
+    // evolution
+    ortho_ch = ORTHOFINDER(bakta_ch.protein_files.collect())
 }
