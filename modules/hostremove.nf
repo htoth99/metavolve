@@ -9,7 +9,7 @@ process HOSTREMOVE {
 
     shell:
     """
-    index_prefix=$(ls !{host_index_dir} | head -n1 | sed -E "s/.[0-9]+.bt2//")
+    index_prefix=\$(ls !{host_index_dir} | head -n1 | sed -E "s/.[0-9]+.bt2//")
     index_prefix_full=!{host_index_dir}/$index_prefix
 
     bowtie2 \
