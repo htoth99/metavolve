@@ -1,0 +1,10 @@
+---
+title: "Untitled"
+format: html
+---
+
+copy and paste the follow commands into AI generator to figure out what houseplants are best for you
+
+```markdown
+my favorite color is pink and I want a low maintenance houseplant that thrives in low light conditions. I also prefer plants that are pet-friendly and have a unique appearance. Please provide a list of suitable houseplants based on these preferences.
+```
